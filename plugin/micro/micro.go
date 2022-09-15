@@ -297,7 +297,7 @@ func (g *micro) generateClientMethod(reqServ, servName, serviceDescVar string, m
 	genRecv := method.GetServerStreaming()
 
 	// Stream auxiliary types and methods.
-	g.P("type ", servName, "_", methName, "Service interface {")
+	g.P("type ", servName, "_", methName, "Client interface {")
 	g.P("SendMsg(interface{}) error")
 	g.P("RecvMsg(interface{}) error")
 	g.P("Close() error")
