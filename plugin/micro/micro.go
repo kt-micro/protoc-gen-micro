@@ -128,11 +128,11 @@ func (g *micro) generateService(file *generator.FileDescriptor, service *pb.Serv
 		serviceName = pkg
 	}
 	servName := generator.CamelCase(origServName)
-	servAlias := servName + "Service"
+	servAlias := servName + "Client"
 
 	// strip suffix
-	if strings.HasSuffix(servAlias, "ServiceService") {
-		servAlias = strings.TrimSuffix(servAlias, "Service")
+	if strings.HasSuffix(servAlias, "ClientClient") {
+		servAlias = strings.TrimSuffix(servAlias, "Client")
 	}
 
 	g.P()
@@ -249,7 +249,7 @@ func (g *micro) generateClientSignature(servName string, method *pb.MethodDescri
 	}
 	respName := "*" + g.typeName(method.GetOutputType())
 	if method.GetServerStreaming() || method.GetClientStreaming() {
-		respName = servName + "_" + generator.CamelCase(origMethName) + "Service"
+		respName = servName + "_" + generator.CamelCase(origMethName) + "Client"
 	}
 
 	return fmt.Sprintf("%s(ctx %s.Context%s, opts ...%s.CallOption) (%s, error)", methName, contextPkg, reqArg, clientPkg, respName)
@@ -261,11 +261,11 @@ func (g *micro) generateClientMethod(reqServ, servName, serviceDescVar string, m
 	inType := g.typeName(method.GetInputType())
 	outType := g.typeName(method.GetOutputType())
 
-	servAlias := servName + "Service"
+	servAlias := servName + "Client"
 
 	// strip suffix
-	if strings.HasSuffix(servAlias, "ServiceService") {
-		servAlias = strings.TrimSuffix(servAlias, "Service")
+	if strings.HasSuffix(servAlias, "ClientClient") {
+		servAlias = strings.TrimSuffix(servAlias, "Client")
 	}
 
 	g.P("func (c *", unexport(servAlias), ") ", g.generateClientSignature(servName, method), "{")
